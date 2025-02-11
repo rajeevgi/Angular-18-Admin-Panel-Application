@@ -4,27 +4,31 @@ const UserModel = require("../model/User"); // Interact with model or entity.
 const UserController = {
   // Get Mapping to get all users.
   getAllUsers: (req, res) => {
-    UserModel.getAllUsers((err, results) => {
+    UserModel.getAllUsers((err, result) => {
       if (err) {
-        return res.status(500).json({ error: err.message });
+        console.error("Error fetching users:", err);
+        return res.status(500).json({ error: "Internal Server Error!" });
       } else {
-        res.json(results);
+        res.json(result);
       }
     });
   },
 
-  // Get Mapping to get user by id.
+  // Get Mapping to get a user by id.
   getUserById: (req, res) => {
-    const { id } = req.params; // get user id first.
+    const { id } = req.params;
 
-    UserModel.getUserById(id, (err, results) => {
+    UserModel.getUserById(id, (err, result) => {
       if (err) {
-        return res.status(500).json({ error: err.message });
-      } else if (results.length === 0) {
-        return res.status(404).json({ message: "User not found!" });
-      } else {
-        res.json(results[0]);
+        console.error("Error fetching user by id:", err);
+        return res.status(500).json({ error: "Internal Server Error!" });
       }
+
+      if (result.length === 0) {
+        return res.status(404).json({ message: "User not found!" });
+      }
+
+      res.json(result[0]);
     });
   },
 
@@ -34,31 +38,30 @@ const UserController = {
 
     UserModel.createUser(usersData, (err, result) => {
       if (err) {
-        return res.status(500).json({ error: err.message });
-      } else {
-        res
-          .status(201)
-          .json({ message: "User Added Successfully...", id: result.insertId });
+        console.error("Error Adding user!", err);
+        return res.status(500).json({ error: "Internal Server Error!" });
       }
+      res.status(201).json({ message: "User Added Successfully...." });
     });
   },
 
   // Put Mapping to update user details.
   updateUser: (req, res) => {
-    const { id } = req.params; // fetch id of a particular user.
-    const usersData = req.body; // then fetch the users info.
+    const { id } = req.params;
+    const usersData = req.body;
 
     UserModel.updateUser(id, usersData, (err, result) => {
       if (err) {
-        return res.status(500).json({ error: err.message });
+        console.error("Error Updating user!", err);
+        return res.status(500).json({ error: "Internal Server Error!" });
       }
 
       if (result.affectedRows === 0) {
         return res.status(404).json({ message: "User not found!" });
       }
 
-      res.json({ message: "User Updated Successfully..." });
-    });
+      res.json({ message: "User Updated Successfully." });
+    }); 
   },
 
   // Delete Mapping to remove user from table.
@@ -67,10 +70,15 @@ const UserController = {
 
     UserModel.deleteUser(id, (err, result) => {
       if (err) {
-        return res.status(404).json({ message: "User not found!" });
-      } else {
-        res.json({ message: "User Deleted Successfully...." });
+        console.error("Error Deleting user!", err);
+        return res.status(500).json({ error: "Internal Server Error!" });
       }
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ message: "User not found!" });
+      }
+
+      res.json({ message: "User Deleted Successfully." });
     });
   },
 };
