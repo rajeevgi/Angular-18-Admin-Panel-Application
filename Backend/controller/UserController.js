@@ -35,6 +35,11 @@ const UserController = {
   // Post Mapping to add users.
   addUser: (req, res) => {
     const usersData = req.body;
+    const { name, email, password } = usersData;
+
+    if (!name || !email || !password) {
+      return res.status(400).json({ error: "All fields are required!" }); // Handle missing data
+    }
 
     UserModel.createUser(usersData, (err, result) => {
       if (err) {
@@ -61,7 +66,7 @@ const UserController = {
       }
 
       res.json({ message: "User Updated Successfully." });
-    }); 
+    });
   },
 
   // Delete Mapping to remove user from table.

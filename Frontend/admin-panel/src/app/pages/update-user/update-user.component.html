@@ -1,0 +1,20 @@
+<div class="container p-3 w-50" >
+    <h3>Update Form</h3>
+    <div class="col-md-12">
+        <form (ngSubmit)="updateUser()">
+            <div class="mb-3">
+                <label for="uname" class="form-label">UserName</label>
+                <input type="text" class="form-control" name="uname" [(ngModel)]="user.name" placeholder="Enter New UserName" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">User Email</label>
+                <input type="email" class="form-control" name="email" [(ngModel)]="user.email" placeholder="Enter New Email Address" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">User Password</label>
+                <input type="password" class="form-control" name="password" [(ngModel)]="user.password" placeholder="Enter New User Password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Update User</button>
+        </form>
+    </div>
+</div>
