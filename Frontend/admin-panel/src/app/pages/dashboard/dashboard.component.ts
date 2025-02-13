@@ -24,7 +24,7 @@ export class DashboardComponent implements OnInit {
   }
 
   onDeleteUser(id : number) {
-    if(confirm("Are you sure you want delete this user ?")){
+    if(confirm("Are you sure you want to delete this user ?")){
       this.apiService.deleteUser(id).subscribe((res : any) => {
         this.userList = this.userList.filter(user => user.id !== id);
         alert('User deleted successfully');

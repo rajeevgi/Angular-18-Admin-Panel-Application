@@ -1,13 +1,46 @@
 <div class="parent">
   <div class="container">
     <div class="card">
-      <h2>Register</h2>
-      <form>
-        <input type="text" id="username" name="username" placeholder="Username" required>
-        <input type="password" id="password" name="password" placeholder="Password" required>
+      <h2>Register as {{ isAdmin ? 'Admin' : 'User' }}</h2>
+
+      <div class="form-group">
+        <label for="userType">Select Type:</label>
+        <select class="form-control" [(ngModel)]="isAdmin">
+          <option [ngValue]="false">User</option>
+          <option [ngValue]="true">Admin</option>
+        </select>
+      </div>
+
+      <form (ngSubmit)="onRegister()">
+        <div *ngIf="!isAdmin">
+          <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" [(ngModel)]="user.name" name="name" required>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" [(ngModel)]="user.email" name="email" required>
+          </div>
+        </div>
+
+        <div class="form-group" *ngIf="isAdmin">
+          <label for="username">Username:</label>
+          <input type="text" class="form-control" id="username" [(ngModel)]="user.username" name="username" required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" class="form-control" id="password" [(ngModel)]="user.password" name="password"
+            required>
+        </div>
+
         <button type="submit">Register</button>
+
+        <button type="button" class="btn btn-link" routerLink="app-login">
+          Already have an account? Login
+        </button>
       </form>
-      <p>Already have an account? <a routerLink="/app-login" routerLinkActive="router-link-active">Login</a></p>
     </div>
   </div>
 </div>

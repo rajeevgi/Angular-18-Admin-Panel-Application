@@ -1,50 +1,48 @@
-const db = require("../config/database"); // interact with db.js
+const db = require("../config/database"); // Database connection
 
-// user entity
+// User entity
 const User = {
-  // select query to get all the users from the table.
+  // Get all users
   getAllUsers: (callback) => {
-    db.query("select * from users", callback);
+    db.query("SELECT * FROM users", callback);
   },
 
-  // select query to get users by id.
+  // Get user by ID
   getUserById: (id, callback) => {
-    db.query("select * from users where id = ?", [id], callback);
+    db.query("SELECT * FROM users WHERE id = ?", [id], callback);
   },
 
-  // insert query to add a user into users table.
+  // Register user (Prevent duplicate emails)
   createUser: (usersData, callback) => {
     const { name, email, password } = usersData;
 
+    db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
+      if (err) return callback(err, null);
+      if (result.length > 0) {
+        return callback({ message: "Email already exists!" }, null);
+      }
+
+      db.query(
+        "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
+        [name, email, password],
+        callback
+      );
+    });
+  },
+
+  // Login user
+  loginUser: (email, password, callback) => {
     db.query(
-      "insert into users (name, email, password) values (?,?,?)",
-      [name, email, password],
-      callback
+      "SELECT * FROM users WHERE email = ? AND password = ?",
+      [email, password],
+      (err, result) => {
+        if (err) return callback(err, null);
+        if (result.length === 0) {
+          return callback({ message: "Invalid credentials!" }, null);
+        }
+        return callback(null, result[0]); // Return user details
+      }
     );
-  },
-
-  // update query to modify users details.
-  updateUser: (id, usersData, callback) => {
-    const { name, email, password } = usersData;
-    const values = [ name, email, password, id ];
-    const sql = "Update users set name = ?, email = ?, password = ? where id = ?";
-    db.query(sql, values, (err, result) => {
-      if(err){
-        return callback(err, null);
-      }else{
-        return callback(null, result);
-      }
-    });
-  },
-
-  // delete query to remove user from a table.(admin only)
-  deleteUser: (id, callback) => {
-    db.query("DELETE FROM users WHERE id = ?", [id], (err, result) => {
-      if (err) {
-        return callback(err, null);
-      }
-      callback(null, result);
-    });
   },
 };
 
