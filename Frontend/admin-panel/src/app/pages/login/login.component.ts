@@ -12,32 +12,27 @@ import { User } from '../../model/user';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
- 
-  userType : string = 'user';
-
-  user : User = new User();
+  user: User = new User();
 
   constructor(private apiService: ApiService, private router: Router) {}
 
-  onLogin() {
-    console.log('Logging in:', this.user);
-    if (this.userType === 'user') {
-      alert('User Loginned Successfully...');
-      // sessionStorage.setItem('User-Data', JSON.stringify(this.user));
-      localStorage.setItem('User-Type', JSON.stringify(this.userType));
-      this.router.navigateByUrl('');
-    } else if (this.userType === 'admin') {
-      alert('Admin Loginned Successfully...');
-      // sessionStorage.setItem('Admin-Data ', JSON.stringify(this.user));
-      localStorage.setItem('User-Type', JSON.stringify(this.userType));
-      this.router.navigateByUrl('/app-dashboard');
-    } else if (this.userType === 'superadmin') {
-      alert('Super Admin loginned Successfully...');
-      // sessionStorage.setItem('SuperAdmin-Data ', JSON.stringify(this.user));
-      localStorage.setItem('User-Type', JSON.stringify(this.userType));
-      this.router.navigateByUrl('/app-admin-dashboard');
-    } else {
-      alert('Invalid Credentials!');
-    }
+  onLogin(){
+    this.apiService.superAdminLogin(this.user).subscribe(( res : any) => {
+      if(this.user.role === 'user'){
+        alert('User Logged in Successfully...');
+        sessionStorage.setItem('User-data', JSON.stringify(res.user));
+        this.router.navigateByUrl('');
+      } else if(this.user.role === 'admin'){
+        alert('Admin Logged in Successfully...');
+        sessionStorage.setItem('Admin-data', JSON.stringify(res.user));
+        this.router.navigateByUrl('/app-dashboard');
+      } else if(this.user.role === 'superadmin'){
+        alert('Super Admin Logged in Successfully...');
+        sessionStorage.setItem('SuperAdmin-data', JSON.stringify(res.user));
+        this.router.navigateByUrl('/app-admin-dashboard');
+      } else {
+        alert('Invalid Credentials!');
+      }
+    });
   }
 }

@@ -1,19 +1,17 @@
-const UserModel = require("../model/User"); // Interact with model or entity.
-// const Admin = require("../model/Admin");
+const UserModel = require("../model/User");
 
-const UserController = { 
-
+const UserController = {
   // Login Route for user
-  loginUser : (req, res) => {
-    const { email, password} = req.body;
+  loginUser: (req, res) => {
+    const { email, password } = req.body;
 
     if (!email && !password) {
       return res.status(400).json({ message: "All fields are required!" });
     }
 
     UserModel.loginUser(email, password, (err, user) => {
-      if(err) {
-        return res.status(500).json({ message : "Internal Server error!" });
+      if (err) {
+        return res.status(500).json({ message: "Internal Server error!" });
       }
 
       // Store session data
@@ -34,7 +32,7 @@ const UserController = {
       if (err) {
         console.error("Error fetching users:", err);
         return res.status(500).json({ error: "Internal Server Error!" });
-      } 
+      }
       res.json(result);
     });
   },
@@ -56,10 +54,6 @@ const UserController = {
 
   // Post Mapping to add users.
   addUser: (req, res) => {
-    // if ((req.session.user.role !== "superadmin" && req.session.user.role !== "admin")) {
-    //   return res.status(403).json({ message: "Access Denied!" });
-    // }
-
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
       return res.status(400).json({ error: "All fields are required!" });
@@ -78,15 +72,15 @@ const UserController = {
   updateUser: (req, res) => {
     const { id } = req.params;
     UserModel.updateUser(id, req.body, (err, result) => {
-        if (err) {
-          console.error("Error Updating user!", err);
-          return res.status(500).json({ error: "Internal Server Error!" });
-        }
-        if (result === 0) {
-          return res.status(404).json({ message: "User not found!" });
-        }
-        res.json({ message: "User Updated Successfully.", result });
-      });
+      if (err) {
+        console.error("Error Updating user!", err);
+        return res.status(500).json({ error: "Internal Server Error!" });
+      }
+      if (result === 0) {
+        return res.status(404).json({ message: "User not found!" });
+      }
+      res.json({ message: "User Updated Successfully.", result });
+    });
   },
 
   // Delete Mapping to remove user from table.
@@ -104,7 +98,6 @@ const UserController = {
       res.json({ message: "User Deleted Successfully.", result });
     });
   },
-
 };
 
 module.exports = UserController;
