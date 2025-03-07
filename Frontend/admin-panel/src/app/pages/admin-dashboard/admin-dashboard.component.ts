@@ -17,7 +17,8 @@ export class AdminDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.apiService.getAdmins().subscribe(( res : any ) => {
-      this.adminList = res;
+      // console.log("Admin Data:",res);
+      this.adminList = res.result;
     })
   }
 

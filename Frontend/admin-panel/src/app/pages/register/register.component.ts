@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink, RouterModule } from '@angular/router';
+import { Router, RouterLink, RouterModule } from '@angular/router';
+import { User } from '../../model/user';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-register',
@@ -11,17 +13,18 @@ import { RouterLink, RouterModule } from '@angular/router';
 })
 export class RegisterComponent {
 
-  isAdmin: boolean = false; // Default to User
+  userType: string = 'user'; // Default to User
 
-  user = {
-    name: '',
-    email: '',
-    username: '',
-    password: ''
-  };
+  User : User = new User();
+
+  constructor(private apiService : ApiService, private router : Router){}
 
   onRegister() {
-    console.log('Registering:', this.user, 'Role:', this.isAdmin ? 'Admin' : 'User');
-    // Add API call here for registration
+    console.log('Registering:', User, 'Role:', this.userType ? 'Admin' : 'User');
+    if ( this.userType === 'superadmin' || this.userType === 'admin'){
+      this.apiService.registerAdmin(Credential).subscribe(( res : any) => {
+        
+      });
+    }
   }
 }

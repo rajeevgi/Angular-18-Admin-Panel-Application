@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
-import { routes } from '../../app.routes';
 import { Router} from '@angular/router';
 
 @Component({

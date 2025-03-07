@@ -7,6 +7,7 @@
                     <th>Id</th>
                     <th>UserName</th>
                     <th>Password</th>
+                    <th>Role</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -15,6 +16,7 @@
                     <td>{{ admin.id }}</td>
                     <td>{{ admin.username }}</td>
                     <td>{{ admin.password }}</td>
+                    <td>{{ admin.role }}</td>
                     <td>
                         <button type="button" class="btn btn-success mx-2" (click)="onUpdateAdmin(admin.id)">Update</button>
                         <button type="button" class="btn btn-danger " (click)="onDeleteAdmin(admin.id)">Delete</button>

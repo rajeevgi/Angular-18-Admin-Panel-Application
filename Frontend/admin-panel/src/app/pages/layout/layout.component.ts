@@ -1,27 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ApiService } from '../../services/api.service';
-import { CommonModule } from '@angular/common';
+import { NavbarComponent } from '../navbar/navbar.component';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-layout',
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule,NavbarComponent,FooterComponent],
   templateUrl: './layout.component.html',
-  styleUrl: './layout.component.css'
+  styleUrl: './layout.component.css',
 })
-export class LayoutComponent implements OnInit{
-
-  role : string = '';   // Stores the logged-in user role.
-
-  constructor(private apiService : ApiService) {  }
-
-  ngOnInit(): void {
-    this.apiService.checkSession().subscribe(( session : any) => {
-      this.role = session.role;
-    });
-  }
-
-  logout(){
-    this.apiService.logout();
-  }
+export class LayoutComponent  {
+  
 }

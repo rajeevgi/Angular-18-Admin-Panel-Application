@@ -1,44 +1,38 @@
-require("dotenv").config();
-
 const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
-const bodyParser = require("body-parser");
-const userRoutes = require("./routes/UserRoutes");
-const adminRoutes = require("./routes/AdminRoutes");
-const authRoutes = require("./routes/AuthRoutes");
+const dotenv = require("dotenv");
 
+dotenv.config();
 const app = express();
 
 // cors setup (Allow frontend to send credentials)
 app.use(cors({
-   origin: 'http://localhost:4200', 
-   credentials: true 
+  origin: 'http://localhost:4200', 
+  credentials: true 
 }));
 
 app.use(express.json());
-app.use(bodyParser.json());  
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false }
-}));
 
-// Routes (Place after session middleware)
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        cookie: { secure: false, httpOnly:true, maxAge: 1000*60*60, sameSite: "lax" }
+      })
+);
+
+// Routes
+const userRoutes = require("./routes/UserRoutes");
+const adminRoutes = require("./routes/AdminRoutes");
+const loginRoutes = require("./controller/LoginController");
+
 app.use("/api/users", userRoutes);
 app.use("/api/admins", adminRoutes);
-app.use("/api/auth", authRoutes);
+app.use("/api/logout", loginRoutes.logoutUser);
 
-// Middleware to prevent unauthorized users
-app.use((req, res, next) => {
-  if(!req.session.user && !req.path.includes("/login")){
-    return res.status(401).json({ message : "Unauthorized! Please login."});
-  }
-  next();
-});
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, (req, res) => {
-  console.log(`Server running on port http://localhost:${PORT}`);
+const port = process.env.PORT;
+app.listen(port, () => {
+  console.log(`Server running on port http://localhost:${port}`);
 });

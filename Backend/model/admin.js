@@ -2,20 +2,25 @@ const db = require("../config/database");
 
 // Admin Entity
 const admin = {
+  // Login Admin or SuperAdmin
+  loginAdmin: (username, password, role, callback) => {
+    const query = "SELECT * FROM admins WHERE username = ? AND password = ? AND role = ?";
+    
+    db.query(query, [username, password, role], (err, results) => {
+      if (err) return callback(err, null);
+      if (results.length === 0) return callback(new Error("Invalid credentials"), null);
+      callback(null, results[0]); // Return the found admin
+    });
+  },
 
-  // Login admin/superadmin
-  loginAdmin: (username, password, callback) => {
-    db.query(
-      "SELECT * FROM admins WHERE username = ? AND password = ?",
-      [username, password],
-      (err, result) => {
-        if (err) return callback(err, null);
-        if (result.length === 0) {
-          return callback({ message: "Invalid credentials!" }, null);
-        }
-        return callback(null, result[0]); // Return admin details
-      }
-    );
+  // Register Admin or SuperAdmin
+  registerAdmin: (username, password, role, callback) => {
+    const query = "INSERT INTO admins (username, password, role) VALUES (?, ?, ?)";
+    
+    db.query(query, [username, password, role], (err, results) => {
+      if (err) return callback(err, null);
+      callback(null, { id: results.insertId, username, role });
+    });
   },
 
   // Get All admins (only for Super Admin)
@@ -23,34 +28,14 @@ const admin = {
     db.query("Select * from admins", callback);
   },
 
-  // Get Admins by ID
+  // Get Admins by ID (Only Super Admin can get Admins by Id)
   getAdminsById: (id, callback) => {
     db.query("Select * from admins where id = ?", [id], callback);
-  },
-
-  // Find admin by username (for login)
-  findAdminByUsername: (username, callback) => {
-    db.query(
-      "Select * from admins where username = ?",
-      [username],
-      (err, result) => {
-        if (err) {
-          return callback(err, null);
-        } else {
-          return callback(null, result.length > 0 ? result[0] : null);
-        }
-      }
-    );
   },
 
   // Create Admin (Only Super Admin can add Admins)
   createAdmin: (adminData, callback) => {
     const { username, password, role } = adminData;
-
-    // Ensure only valid roles are allowed
-    if(!["superadmin", "admin"].includes(role)){
-      return callback(new Error("Invalid role!"), null);
-    }
 
     db.query(
       "Insert into admins (username, password, role) values (?, ?, ?)",
@@ -62,15 +47,9 @@ const admin = {
   // Update Admin (Only Super Admin Can Update Admins)
   updateAdmin: (id, adminData, callback) => {
     const { username, password, role } = adminData;
-
-    if(!["superadmin","admin"].includes(role)){
-      return callback(new Error("Invalid role!"), null);
-    }
-
-    const values = [username, password, role, id];
     db.query(
       "Update admins set username = ?, password = ?, role = ? where id = ?",
-      values,
+      [username, password, role, id],
       (err, result) => {
         if (err) {
           return callback(err, null);

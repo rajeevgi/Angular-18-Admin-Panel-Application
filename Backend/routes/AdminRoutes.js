@@ -1,17 +1,21 @@
 const express = require("express");
 const adminController = require("../controller/AdminController");
-const { checkRole } = require("../middleware/AuthMiddleware");
+const loginController = require("../controller/LoginController");
+const registerController = require("../controller/RegisterController");
+const AuthMiddleware = require("../middleware/AuthMiddleware");
 const router = express.Router();
 
-// Routes only for Super Admin
-router.post("/register", adminController.registerAdmin);
+// Login Routes only for Super Admin or Admin
 router.post("/login", adminController.loginAdmin);
-router.post("/logout", adminController.logoutAdmin);
+router.post("/logout", loginController.logoutAdmin);
 
-router.get("/listAllAdmins", checkRole(['superadmin']), adminController.getAllAdmins);
-router.get("/getAdminById/:id", checkRole(['superadmin']), adminController.getAdminsById);
-router.post("/saveAdmin", checkRole(['superadmin']), adminController.addAdmin);
-router.put("/updateAdmin/:id", checkRole(['superadmin']), adminController.updateAdmin);
-router.delete("/deleteAdmin/:id", checkRole(['superadmin']), adminController.deleteAdmin);
+// Register Routes Only for Super Admin or Admin
+router.post("/register",AuthMiddleware.isSuperAdmin, registerController.registerAdmin)
+
+router.get("/listAllAdmins",AuthMiddleware.isSuperAdmin, adminController.getAllAdmins);
+router.get("/getAdminById/:id",AuthMiddleware.isSuperAdmin, adminController.getAdminsById);
+router.post("/saveAdmin",AuthMiddleware.isSuperAdmin, adminController.addAdmin);
+router.put("/updateAdmin/:id",AuthMiddleware.isSuperAdmin, adminController.updateAdmin);
+router.delete("/deleteAdmin/:id",AuthMiddleware.isSuperAdmin, adminController.deleteAdmin);
 
 module.exports = router;

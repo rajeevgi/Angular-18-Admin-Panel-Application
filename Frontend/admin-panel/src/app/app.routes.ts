@@ -8,6 +8,8 @@ import { LayoutComponent } from './pages/layout/layout.component';
 import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
 import { AddAdminComponent } from './pages/add-admin/add-admin.component';
 import { AdminUpdateComponent } from './pages/admin-update/admin-update.component';
+import { NavbarComponent } from './pages/navbar/navbar.component';
+import { FooterComponent } from './pages/footer/footer.component';
 
 export const routes: Routes = [
   // default route
@@ -18,18 +20,17 @@ export const routes: Routes = [
   },
 
   {
+    path: 'app-register',
+    component: RegisterComponent,
+  },
+
+  {
     path: 'app-login',
     component: LoginComponent,
   },
 
   {
-    path: 'app-register',
-    component: RegisterComponent,
-  },
-
-  // Routes for the layout component
-  {
-    path: '',
+    path:'',
     component: LayoutComponent,
     children: [
       {
@@ -62,6 +63,16 @@ export const routes: Routes = [
         component: UpdateUserComponent,
       },
     ],
+  },
+
+  {
+    path: 'app-navbar',
+    component: NavbarComponent
+  },
+
+  {
+    path: 'app-footer',
+    component: FooterComponent
   },
 
   {

@@ -7,27 +7,38 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ApiService {
-  private userUrl = 'http://localhost:5000/api/users';
+  
+  private baseUrl = "http://localhost:5000/api";
 
   private adminUrl = 'http://localhost:5000/api/admins';
+  
+  private userUrl = 'http://localhost:5000/api/users';
 
   constructor(private http: HttpClient, private router : Router) {}
 
-  login(credentials : any){
-    return this.http.post('/api/login', credentials);
+  superAdminLogin(credentials : any){
+    return this.http.post(`${this.adminUrl}/login`, credentials);
   }
 
-  checkSession(){
-    return this.http.get('/api/session');
+  adminLogin(credentials : any ){
+    return this.http.post(`${this.adminUrl}/login`, credentials);
   }
 
-  logout(){
-    this.http.post('/api/logout', {}).subscribe(() => {
-      this.router.navigate(['/app-login']);
-    });
+  userLogin(credentials : any){
+    return this.http.post(`${this.userUrl}/loginUser`, credentials);
   }
+
+  checkSession() : Observable<any>{
+    return this.http.get(`${this.baseUrl}/session`);
+  }
+
+  logout(): Observable<any> {
+    return this.http.post(`${this.baseUrl}/logout`, {}, { withCredentials: true });
+  }
+  
 
   // Users crud operations
+
   getUsers(): Observable<any> {
     return this.http.get(`${this.userUrl}/listAllUsers`);
   }
@@ -49,8 +60,13 @@ export class ApiService {
   }
 
   // Admins crud operations
+
+  registerAdmin(data : any) : Observable<any>{
+    return this.http.post(`${this.adminUrl}/register`, data);
+  }
+
   getAdmins(): Observable<any> {
-    return this.http.get(`${this.adminUrl}/listAllAdmins`);
+    return this.http.get(`${this.adminUrl}/listAllAdmins`, {withCredentials: true});
   }
 
   getAdminById(id: number): Observable<any> {
