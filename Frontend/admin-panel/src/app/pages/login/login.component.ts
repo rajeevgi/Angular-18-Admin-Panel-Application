@@ -17,7 +17,7 @@ export class LoginComponent {
   constructor(private apiService: ApiService, private router: Router) {}
 
   onLogin(){
-    this.apiService.superAdminLogin(this.user).subscribe(( res : any) => {
+    this.apiService.Login(this.user).subscribe(( res : any) => {
       if(this.user.role === 'user'){
         alert('User Logged in Successfully...');
         sessionStorage.setItem('User-data', JSON.stringify(res.user));

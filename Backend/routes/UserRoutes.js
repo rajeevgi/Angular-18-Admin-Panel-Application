@@ -1,5 +1,6 @@
 const express = require("express");
 const userController = require("../controller/UserController");
+const loginController = require("../controller/LoginController")
 const registerController = require("../controller/RegisterController");
 const AuthMiddleware = require("../middleware/AuthMiddleware");
 
@@ -9,7 +10,10 @@ const router = express.Router();
 router.post("/register", registerController.registerUser);
 
 // Login Routes for User only
-router.post("/login", userController.loginUser)
+router.post("/login", loginController.login)
+
+// Logout Routes
+router.post("/logout", loginController.logout);
 
 router.get("/listAllUsers", AuthMiddleware.isAdminOrSuperAdmin, userController.getAllUsers);
 router.get("/getUserById/:id", AuthMiddleware.isAdminOrSuperAdmin, userController.getUserById);

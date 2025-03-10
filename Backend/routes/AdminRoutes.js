@@ -6,11 +6,13 @@ const AuthMiddleware = require("../middleware/AuthMiddleware");
 const router = express.Router();
 
 // Login Routes only for Super Admin or Admin
-router.post("/login", adminController.loginAdmin);
-router.post("/logout", loginController.logoutAdmin);
+router.post("/login", loginController.login);
 
 // Register Routes Only for Super Admin or Admin
-router.post("/register",AuthMiddleware.isSuperAdmin, registerController.registerAdmin)
+router.post("/register", registerController.registerAdmin)
+
+// Logout Routes
+router.post("/logout", loginController.logout);
 
 router.get("/listAllAdmins",AuthMiddleware.isSuperAdmin, adminController.getAllAdmins);
 router.get("/getAdminById/:id",AuthMiddleware.isSuperAdmin, adminController.getAdminsById);

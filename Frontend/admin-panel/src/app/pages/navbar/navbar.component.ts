@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { Router, RouterLink } from '@angular/router';
-import { User } from '../../model/user';
 
 @Component({
   selector: 'app-navbar',

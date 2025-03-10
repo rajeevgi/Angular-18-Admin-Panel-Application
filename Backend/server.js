@@ -30,7 +30,8 @@ const loginRoutes = require("./controller/LoginController");
 
 app.use("/api/users", userRoutes);
 app.use("/api/admins", adminRoutes);
-app.use("/api/logout", loginRoutes.logoutUser);
+app.use("/api/auth", loginRoutes.login)
+app.use("/api", loginRoutes.logout);
 
 const port = process.env.PORT;
 app.listen(port, () => {

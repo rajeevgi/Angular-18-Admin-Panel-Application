@@ -4,6 +4,8 @@ const db = require("../config/database");
 const admin = {
   // Login Admin or SuperAdmin
   loginAdmin: (username, password, role, callback) => {
+    console.log("Admin Login Query:", username, password, role); // Debugging
+
     const query = "SELECT * FROM admins WHERE username = ? AND password = ? AND role = ?";
     
     db.query(query, [username, password, role], (err, results) => {
@@ -35,11 +37,11 @@ const admin = {
 
   // Create Admin (Only Super Admin can add Admins)
   createAdmin: (adminData, callback) => {
-    const { username, password, role } = adminData;
+    const { username, password } = adminData;
 
     db.query(
-      "Insert into admins (username, password, role) values (?, ?, ?)",
-      [username, password, role],
+      "Insert into admins (username, password) values (?, ?)",
+      [username, password],
       callback
     );
   },

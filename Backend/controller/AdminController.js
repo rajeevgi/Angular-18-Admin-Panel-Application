@@ -59,11 +59,11 @@ const AdminController = {
   addAdmin: (req, res) => {
     const { username, password, role } = req.body;
 
-    if (!username || !password || !role) {
+    if (!username || !password ) {
       return res.status(400).json({ message: "All fields are required!" });
     }
 
-    admin.createAdmin({ username, password, role }, (err) => {
+    admin.createAdmin({ username, password }, (err) => {
       if (err) {
         return res
           .status(500)

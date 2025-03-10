@@ -16,25 +16,20 @@ export class ApiService {
 
   constructor(private http: HttpClient, private router : Router) {}
 
-  superAdminLogin(data : any){
-    return this.http.post(`${this.adminUrl}/login`, data, { withCredentials : true });
+  Login(data : any){
+    return this.http.post(`${this.baseUrl}/auth/login`, data, { withCredentials : true });
   }
 
-  adminLogin(data : any ){
-    return this.http.post(`${this.adminUrl}/login`, data , { withCredentials : true });
-  }
-
-  userLogin(data : any){
-    return this.http.post(`${this.userUrl}/loginUser`, data, { withCredentials : true });
-  }
-
-
-  logout(): Observable<any> {
-    return this.http.post(`${this.baseUrl}/logout`, {}, { withCredentials: true });
+  logout() {
+    return this.http.post(`${this.baseUrl}/logout`, { withCredentials: true });
   }
   
 
   // Users crud operations
+
+  registerUser(data : any) : Observable<any> {
+    return this.http.post(`${this.userUrl}/register`, data, { withCredentials : true });
+  }
 
   getUsers(): Observable<any> {
     return this.http.get(`${this.userUrl}/listAllUsers`, { withCredentials : true });

@@ -13,18 +13,25 @@ import { ApiService } from '../../services/api.service';
 })
 export class RegisterComponent {
 
-  userType: string = 'user'; // Default to User
-
   User : User = new User();
 
   constructor(private apiService : ApiService, private router : Router){}
 
   onRegister() {
-    console.log('Registering:', User, 'Role:', this.userType ? 'Admin' : 'User');
-    if ( this.userType === 'superadmin' || this.userType === 'admin'){
-      this.apiService.registerAdmin(Credential).subscribe(( res : any) => {
-        
+    console.log('Registering:', User, 'Role:', this.User.role ? 'Admin' : 'User');
+    if (this.User.role === 'admin'){
+      this.apiService.registerAdmin(this.User).subscribe(( res : any) => {
+        alert('Admin Registered Successfully...');
+        this.router.navigate(["/app-login"]);
       });
+    } else if(this.User.role === 'user'){
+      this.apiService.registerUser(this.User).subscribe(( res : any) => {
+        alert('User Registered Successfully...');
+        this.router.navigate(["/app-login"]);
+      });
+    }else {
+      alert('Something went wrong!');
+      this.router.navigate(["/app-register"])
     }
   }
 }

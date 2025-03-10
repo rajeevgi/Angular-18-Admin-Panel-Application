@@ -1,0 +1,10 @@
+<div class="card" style="width: 18rem;">
+    <img src="..." class="card-img-top" alt="...">
+    <div class="card-body">
+      <h5 class="card-title">{{ user.name }}</h5>
+      <p class="card-text"> Email : {{ user.email }} <br>
+                            Role : {{ user.role }}
+    </p>
+      <a [routerLink]="['/app-dashbaord']" routerLinkActive="router-link-active"  class="btn btn-primary">Back to Dashboard</a>
+    </div>
+  </div>

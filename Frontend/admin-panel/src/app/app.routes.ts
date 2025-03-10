@@ -10,6 +10,7 @@ import { AddAdminComponent } from './pages/add-admin/add-admin.component';
 import { AdminUpdateComponent } from './pages/admin-update/admin-update.component';
 import { NavbarComponent } from './pages/navbar/navbar.component';
 import { FooterComponent } from './pages/footer/footer.component';
+import { UserDataComponent } from './pages/user-data/user-data.component';
 
 export const routes: Routes = [
   // default route
@@ -62,6 +63,11 @@ export const routes: Routes = [
         path: 'app-update-user/:id',
         component: UpdateUserComponent,
       },
+
+      {
+        path: 'app-user-data/:id',
+        component: UserDataComponent
+      }
     ],
   },
 
